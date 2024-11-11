@@ -38,3 +38,4 @@ entry("sleep");
 entry("uptime");
 entry("get_syscall_count");
 entry("k_sha256");
+entry("getTime");

@@ -24,6 +24,7 @@ int sleep(int);
 int uptime(void);
 int get_syscall_count(void);
 int k_sha256(char* data, int length);
+int getTime(void);
 
 
 // ulib.c

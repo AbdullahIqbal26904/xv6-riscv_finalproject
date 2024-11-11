@@ -52,7 +52,7 @@ main()
 
         // Print the SHA-256 hash
         printf("\nSHA-256 hash of '%s':\n", input);
-        print_hash_kernelspace(hash);  // Use the print_hash function to print the hash
+        print_hash_kernelspace(hash);  // Use the print_hash_kernelspace function to print the hash
 
     
     virtio_disk_init(); // emulated hard disk

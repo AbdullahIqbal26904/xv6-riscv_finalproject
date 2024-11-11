@@ -22,3 +22,4 @@
 #define SYS_close  21
 #define SYS_get_syscall_count 23  // Pick a unique number for the new system call
 #define SYS_k_sha256 26
+#define SYS_getTime 27

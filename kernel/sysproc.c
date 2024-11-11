@@ -49,6 +49,13 @@ sys_k_sha256(void) {
 
     return 0;  // Return the pointer to the hash
 }
+//handler function for implementation of wrapper function for getTime
+uint64
+sys_getTime(void)
+{	
+    return r_time();  // Read the real-time clock ticks
+}
+//handler function to get number of system call made
 uint64
 sys_get_syscall_count(void)
 {
