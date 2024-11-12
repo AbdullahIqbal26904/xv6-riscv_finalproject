@@ -38,14 +38,14 @@ sys_k_sha256(void) {
     
     //copy data from userspace to kernel space
     either_copyin(kdata, 1, userdata, length+1);
-    printf("%s\n", ((uint8_t *)kdata));
+    //printf("%s\n", ((uint8_t *)kdata));
     
     
-    uint8_t* hash = sha256((uint8_t *)kdata, length);  // Call the SHA-256 function
-    
+    //uint8_t* hash = sha256((uint8_t *)kdata, length);  // Call the SHA-256 function
+    sha256((uint8_t *)kdata, length);
     // Print the hash to the console for verification (optional)
-    print_hash(hash);
-    printf("\n");
+    //print_hash(hash);
+    //printf("\n");
 
     return 0;  // Return the pointer to the hash
 }

@@ -2,26 +2,43 @@
 #include "kernel/stat.h"
 #include "user/user.h"
 
-// Assuming k_sha256 is defined and accessible from here; otherwise, replace with your SHA-256 function.
-extern int k_sha256(char *data, int len);
+#define NUM_RUNS 100
+#define NUM_STRINGS 20
+
+//extern int k_sha256(char *data, int len); // SHA-256 function for user space
+
+// Function to initialize strings of varying lengths
+void generate_string(char *str, int len) {
+    for (int i = 0; i < len; i++) {
+        str[i] = 'a' + (i % 26); // Fill with repetitive characters ('a' to 'z')
+    }
+    str[len] = '\0'; // Null-terminate the string
+}
 
 int main(int argc, char *argv[]) {
-    uint64 start;
-    uint64 end;
-    char data[5] = "hello";  // Sample input data for SHA-256
+    uint64 times[NUM_RUNS];
+    int string_lengths[NUM_STRINGS] = {5, 15, 25, 35, 45, 55, 65, 75, 85, 95, 
+                                       105, 115, 125, 135, 145, 155, 165, 175, 185, 195};
 
-    // Get the start time
-    start = getTime();
+    for (int s = 0; s < NUM_STRINGS; s++) {
+        int len = string_lengths[s];
+        char data[len + 1];
+        generate_string(data, len);
 
-    // Call the SHA-256 hashing function (or any function you want to measure)
-    int final = k_sha256(data, 5);
+        // Run hashing NUM_RUNS times for each string length to get average timing
+        uint64 sum = 0;
+        for (int i = 0; i < NUM_RUNS; i++) {
+            uint64 start = getTime();
+            k_sha256(data, len);  // Call the SHA-256 function without assigning the result
+            uint64 end = getTime();
+            times[i] = end - start;
+            sum += times[i];
+        }
 
-    // Get the end time
-    end = getTime();
-
-    // Calculate and print the duration
-    printf("Execution time for SHA-256 in ticks: %ld\n", end - start);
-    printf("Value is encrypted, final result: %d\n", final);  // Optional, based on your k_sha256 implementation
+        // Calculate and print the average time for the current string length
+        uint64 avg_time = sum / NUM_RUNS;
+        printf("String length %d: Average execution time: %ld ticks\n", len, avg_time);
+    }
 
     exit(0);
 }

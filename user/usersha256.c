@@ -1,7 +1,9 @@
 #include "kernel/types.h"
 #include "user/user.h"
 #include <stddef.h>
-
+#define NUM_RUNS 100
+#define NUM_STRINGS 20
+#include "kernel/stat.h"
 typedef unsigned char uint8_t;
 typedef unsigned int uint32_t;
 typedef unsigned long long uint64_t;
@@ -159,22 +161,55 @@ void print_hash(uint8_t *hash) {
     hash_string[64] = '\0';
     printf("%s\n", hash_string);
 }
+void generate_string(char *str, int len) {
+    for (int i = 0; i < len; i++) {
+        str[i] = 'a' + (i % 26); // Fill with repetitive characters ('a' to 'z')
+    }
+    str[len] = '\0'; // Null-terminate the string
+}
 
 int main(int argc, char *argv[]) {
-    int i;
+    uint64 times[NUM_RUNS];
+    int string_lengths[NUM_STRINGS] = {5, 15, 25, 35, 45, 55, 65, 75, 85, 95, 
+                                       105, 115, 125, 135, 145, 155, 165, 175, 185, 195};
 
-    if (argc < 2) {
-        printf("Usage: sha256test <strings>\n");
-        exit(1);
-    }
+    for (int s = 0; s < NUM_STRINGS; s++) {
+        int len = string_lengths[s];
+        char data[len + 1];
+        generate_string(data, len);
 
-    for (i = 1; i < argc; i++) {
-        uint8_t *hash = sha256((const uint8_t *)argv[i], strlen(argv[i]));  // Get the hash from sha256 function
-        printf("SHA256 hash of %s: ", argv[i]);
-        print_hash(hash);  // Print the resulting hash
+        // Run hashing NUM_RUNS times for each string length to get average timing
+        uint64 sum = 0;
+        for (int i = 0; i < NUM_RUNS; i++) {
+            uint64 start = getTime();
+            sha256((uint8_t *)data, len);  // Call the SHA-256 function without assigning the result
+            uint64 end = getTime();
+            times[i] = end - start;
+            sum += times[i];
+        }
+
+        // Calculate and print the average time for the current string length
+        uint64 avg_time = sum / NUM_RUNS;
+        printf("String length %d: Average execution time: %ld ticks\n", len, avg_time);
     }
 
     exit(0);
 }
+//int main(int argc, char *argv[]) {
+//    int i;
+//
+//    if (argc < 2) {
+//        printf("Usage: sha256test <strings>\n");
+//        exit(1);
+//    }
+//
+//    for (i = 1; i < argc; i++) {
+//        uint8_t *hash = sha256((const uint8_t *)argv[i], strlen(argv[i]));  // Get the hash from sha256 function
+//        printf("SHA256 hash of %s: ", argv[i]);
+//        print_hash(hash);  // Print the resulting hash
+//    }
+//
+//    exit(0);
+//}
 
 
