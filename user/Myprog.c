@@ -17,8 +17,8 @@ void generate_string(char *str, int len) {
 
 int main(int argc, char *argv[]) {
     uint64 times[NUM_RUNS];
-    int string_lengths[NUM_STRINGS] = {5, 15, 25, 35, 45, 55, 65, 75, 85, 95, 
-                                       105, 115, 125, 135, 145, 155, 165, 175, 185, 195};
+    int string_lengths[NUM_STRINGS] = {50, 70, 90, 110, 130, 150, 170, 190, 210, 230, 
+                                       250, 270, 290, 310, 330, 350, 370, 390, 410, 420};
 
     for (int s = 0; s < NUM_STRINGS; s++) {
         int len = string_lengths[s];

@@ -3,6 +3,7 @@
 #include <stddef.h>
 #define NUM_RUNS 100
 #define NUM_STRINGS 20
+
 #include "kernel/stat.h"
 typedef unsigned char uint8_t;
 typedef unsigned int uint32_t;
@@ -161,6 +162,9 @@ void print_hash(uint8_t *hash) {
     hash_string[64] = '\0';
     printf("%s\n", hash_string);
 }
+
+
+// Function to initialize strings of varying lengths
 void generate_string(char *str, int len) {
     for (int i = 0; i < len; i++) {
         str[i] = 'a' + (i % 26); // Fill with repetitive characters ('a' to 'z')
@@ -170,8 +174,8 @@ void generate_string(char *str, int len) {
 
 int main(int argc, char *argv[]) {
     uint64 times[NUM_RUNS];
-    int string_lengths[NUM_STRINGS] = {5, 15, 25, 35, 45, 55, 65, 75, 85, 95, 
-                                       105, 115, 125, 135, 145, 155, 165, 175, 185, 195};
+    int string_lengths[NUM_STRINGS] = {50, 70, 90, 110, 130, 150, 170, 190, 210, 230, 
+                                       250, 270, 290, 310, 330, 350, 370, 390, 410,420};
 
     for (int s = 0; s < NUM_STRINGS; s++) {
         int len = string_lengths[s];
@@ -182,7 +186,7 @@ int main(int argc, char *argv[]) {
         uint64 sum = 0;
         for (int i = 0; i < NUM_RUNS; i++) {
             uint64 start = getTime();
-            sha256((uint8_t *)data, len);  // Call the SHA-256 function without assigning the result
+            k_sha256(data, len);  // Call the SHA-256 function without assigning the result
             uint64 end = getTime();
             times[i] = end - start;
             sum += times[i];
@@ -195,6 +199,8 @@ int main(int argc, char *argv[]) {
 
     exit(0);
 }
+
+
 //int main(int argc, char *argv[]) {
 //    int i;
 //
